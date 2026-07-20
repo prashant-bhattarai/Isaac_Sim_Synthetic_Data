@@ -23,8 +23,13 @@ if assets_root_path is None:
     print("Could not find Isaac Sim assets server!")
     quit()
 
-warehouse_usd = assets_root_path + "/Isaac/Environments/Simple_Warehouse/warehouse.usd"
-box_usd = assets_root_path + "/Isaac/Props/Blocks/cardboard_box.usd"
+warehouse_usd = assets_root_path + "/Isaac/Environments/Simple_Warehouse/full_warehouse.usd"
+box_usds = [
+    assets_root_path + "/Isaac/Environments/Simple_Warehouse/Props/SM_CardBoxD_01.usd",
+    assets_root_path + "/Isaac/Environments/Simple_Warehouse/Props/SM_CardBoxD_02.usd",
+    assets_root_path + "/Isaac/Environments/Simple_Warehouse/Props/SM_CardBoxD_03.usd",
+    assets_root_path + "/Isaac/Environments/Simple_Warehouse/Props/SM_CardBoxD_04.usd"
+]
 
 world = World()
 add_reference_to_stage(usd_path=warehouse_usd, prim_path="/World/Warehouse")
@@ -37,14 +42,14 @@ writer.initialize(output_dir=out_dir, rgb=True, bounding_box_2d_tight=True)
 writer.attach([render_product])
 
 with rep.new_layer():
-    box = rep.create.from_usd(box_usd, semantics=[('class', 'shipping_box')])
-
     def randomize_box():
-        boxes = rep.get.prims(semantics=[('class', 'shipping_box')])
+        boxes = rep.randomizer.instantiate(box_usds, size=1)
         with boxes:
+            rep.modify.semantics([('class', 'shipping_box')])
             rep.modify.pose(
                 position=rep.distribution.uniform((-2, -2, 0.2), (2, 2, 0.2)),
-                rotation=rep.distribution.uniform((0, 0, -180), (0, 0, 180))
+                rotation=rep.distribution.uniform((0, 0, -180), (0, 0, 180)),
+                scale=rep.distribution.uniform((8.0, 8.0, 8.0), (12.0, 12.0, 12.0))
             )
         return boxes.node
 
