@@ -1,1 +1,1 @@
-{"0": {"class": "floor"}, "1": {"class": "wall"}, "2": {"class": "shipping_box"}, "3": {"class": "box,shipping_box"}}
+{"0": {"class": "floor"}, "1": {"class": "wall"}, "2": {"class": "pillar"}, "3": {"class": "box"}, "4": {"class": "crate"}, "5": {"class": "bottle"}, "6": {"class": "paper_note"}, "7": {"class": "cone"}, "8": {"class": "sign"}, "9": {"class": "floor_decal"}, "10": {"class": "rack"}, "11": {"class": "pallet"}, "12": {"class": "forklift"}, "13": {"class": "shipping_box"}}

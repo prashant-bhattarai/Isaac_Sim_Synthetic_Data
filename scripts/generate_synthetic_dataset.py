@@ -25,16 +25,22 @@ if assets_root_path is None:
 
 warehouse_usd = assets_root_path + "/Isaac/Environments/Simple_Warehouse/full_warehouse.usd"
 box_usds = [
-    assets_root_path + "/Isaac/Environments/Simple_Warehouse/Props/SM_CardBoxD_01.usd",
-    assets_root_path + "/Isaac/Environments/Simple_Warehouse/Props/SM_CardBoxD_02.usd",
-    assets_root_path + "/Isaac/Environments/Simple_Warehouse/Props/SM_CardBoxD_03.usd",
-    assets_root_path + "/Isaac/Environments/Simple_Warehouse/Props/SM_CardBoxD_04.usd"
+    assets_root_path + "/Isaac/SimReady/Industrial/Warehouse/Boxes/Cardboard_Box_A01/sm_box_cardboard_a01_01.usd",
+    assets_root_path + "/Isaac/SimReady/Industrial/Warehouse/Boxes/Cardboard_Box_A03/sm_box_cardboard_a03_01.usd",
+    assets_root_path + "/Isaac/SimReady/Industrial/Warehouse/Boxes/Cardboard_Box_B02/sm_box_cardboard_b02_01.usd",
+    assets_root_path + "/Isaac/SimReady/Industrial/Warehouse/Boxes/Cardboard_Box_C03/sm_box_cardboard_c03_01.usd",
+    assets_root_path + "/Isaac/SimReady/Industrial/Warehouse/Boxes/Cardboard_Box_D02/sm_box_cardboard_d02_01.usd",
+    assets_root_path + "/Isaac/SimReady/Industrial/Warehouse/Boxes/Corrugated_Brown_Box_B09/sm_box_corrugated_brown_b09_01.usd",
+    assets_root_path + "/Isaac/SimReady/Industrial/Warehouse/Boxes/Corrugated_Brown_Box_B13/sm_box_corrugated_brown_b13_01.usd",
+    assets_root_path + "/Isaac/SimReady/Industrial/Warehouse/Boxes/Corrugated_Brown_Box_B19/sm_box_corrugated_brown_b19_01.usd",
+    assets_root_path + "/Isaac/SimReady/Industrial/Warehouse/Boxes/Corrugated_Brown_Box_B28/sm_box_corrugated_brown_b28_01.usd",
+    assets_root_path + "/Isaac/SimReady/Industrial/Warehouse/Boxes/Cube_Box_A09/sm_box_cube_a09_01.usd"
 ]
 
 world = World()
 add_reference_to_stage(usd_path=warehouse_usd, prim_path="/World/Warehouse")
 
-camera = rep.create.camera(position=(0, -5, 5), look_at=(0, 0, 0))
+camera = rep.create.camera(position=(0, -7, 7), look_at=(0, 0, 0))
 render_product = rep.create.render_product(camera, (1024, 1024))
 
 writer = rep.WriterRegistry.get("BasicWriter")
@@ -49,18 +55,16 @@ with rep.new_layer():
             rep.modify.pose(
                 position=rep.distribution.uniform((-2, -2, 0.2), (2, 2, 0.2)),
                 rotation=rep.distribution.uniform((0, 0, -180), (0, 0, 180)),
-                scale=rep.distribution.uniform((8.0, 8.0, 8.0), (12.0, 12.0, 12.0))
+                scale=rep.distribution.uniform((2.0, 2.0, 2.0), (4.0, 4.0, 4.0))
             )
         return boxes.node
 
     rep.randomizer.register(randomize_box)
 
-with rep.trigger.on_frame(max_execs=10):
+with rep.trigger.on_frame(max_execs=20, rt_subframes=90):
     rep.randomizer.randomize_box()
 
 #Generating 10 randomized images
-
-world.reset()
 
 rep.orchestrator.run()
 
