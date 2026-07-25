@@ -60,15 +60,23 @@ from pxr import Usd, UsdPhysics
 
 stage = omni.usd.get_context().get_stage()
 
+floor_path_pattern = "/World/Warehouse/SM_floor(39|32|47|58)/SM_floor02"  # moved up, before first use
+
 # --- Preload all boxes once, toggle visibility per frame (no accumulation) ---
 box_prim_paths = []
 for i, box_path in enumerate(box_usds):
     prim_path = f"/World/Boxes/Box_{i}"
     add_reference_to_stage(usd_path=box_path, prim_path=prim_path)
-    box_prim = stage.GetPrimAtPath(prim_path)
-    box_prim.SetInstanceable(False)   
     box_prim_paths.append(prim_path)
 
+# de-instance everything nested, so physics API can actually be edited
+for box_path in box_prim_paths:
+    box_prim = stage.GetPrimAtPath(box_path)
+    for prim in Usd.PrimRange(box_prim, Usd.TraverseInstanceProxies()):
+        if prim.IsInstance():
+            prim.SetInstanceable(False)
+
+# now disable rigid bodies for real
 for box_path in box_prim_paths:
     box_prim = stage.GetPrimAtPath(box_path)
     for prim in Usd.PrimRange(box_prim):
@@ -76,6 +84,8 @@ for box_path in box_prim_paths:
             UsdPhysics.RigidBodyAPI(prim).GetRigidBodyEnabledAttr().Set(False)
 
 all_boxes = rep.get.prims(path_pattern="/World/Boxes/Box_.*")
+floor_check = rep.get.prims(path_pattern=floor_path_pattern)
+print(f"Floor prims matched: {floor_check.node}")
 with all_boxes:
     rep.modify.semantics([('class', 'shipping_box')])
 
