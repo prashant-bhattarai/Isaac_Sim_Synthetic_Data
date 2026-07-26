@@ -67,11 +67,20 @@ for i, box_path in enumerate(box_usds):
     add_reference_to_stage(usd_path=box_path, prim_path=prim_path)
     box_prim_paths.append(prim_path)
 
-all_boxes = rep.get.prims(path_pattern="/World/Boxes/Box_.*")
+stage = omni.usd.get_context().get_stage()
+
+stripped = 0
+for prim in stage.Traverse():
+    if str(prim.GetPath()).startswith("/World/Boxes/"):
+        for schema_name in list(prim.GetAppliedSchemas()):
+            if "Semantic" in schema_name:
+                prim.RemoveAppliedSchema(schema_name)
+                stripped += 1
+print(f"Stripped {stripped} pre-existing semantic schema instance(s)")
+
+all_boxes = rep.get.prims(path_pattern="^/World/Boxes/Box_[0-9]+$")
 with all_boxes:
     rep.modify.semantics([('class', 'shipping_box')])
-
-stage = omni.usd.get_context().get_stage()
 
 floor_meshes = [
     str(p.GetPath()) for p in stage.Traverse()
@@ -115,7 +124,7 @@ def randomize_box():
     chosen_slots = random.sample(slot_xy, num_visible)
 
     for path in box_prim_paths:
-        prim_group = rep.get.prims(path_pattern=path)
+        prim_group = rep.get.prims(path_pattern=f"^{path}$")
         if path in chosen_boxes:
             idx = chosen_boxes.index(path)
             x, y = chosen_slots[idx]
