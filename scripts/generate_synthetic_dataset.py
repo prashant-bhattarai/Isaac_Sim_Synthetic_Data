@@ -97,12 +97,12 @@ writer.attach([render_product])
 slot_xy = [(-0.7, -0.6), (0.7, -0.6), (-0.7, 0.6), (0.7, 0.6)]
 
 light_radius = 3.0
-light_height = 3.0
+light_height = 4.0
 
 lights = rep.create.light(
     light_type="Sphere",
     color=rep.distribution.uniform((0.9, 0.85, 0.75), (1.0, 1.0, 0.95)),
-    intensity=rep.distribution.uniform(4000, 9000),
+    intensity=rep.distribution.uniform(4000, 14000),
     scale=rep.distribution.uniform(1.0, 1.5),
     position=(0, 0, light_height),
     count=1,
