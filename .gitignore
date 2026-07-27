@@ -1,0 +1,17 @@
+# Generated datasets — regenerate via scripts, don't version large binaries
+output/
+
+yolo_dataset_v1.zip
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Isaac Sim / Kit logs
+*.log
+kit_*.log
+
+# OS cruft
+.DS_Store
+Thumbs.db

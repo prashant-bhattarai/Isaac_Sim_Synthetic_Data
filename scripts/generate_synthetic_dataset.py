@@ -1,3 +1,4 @@
+import sys
 from isaacsim import SimulationApp
 
 config = {
@@ -22,8 +23,12 @@ import os
 settings = carb.settings.get_settings()
 settings.set("/rtx/post/dlss/execMode", 0)
 
-out_dir = os.path.join(os.getcwd(), "output", "box_dataset")
-print(f"Saving data to: {out_dir}")
+batch_id = int(sys.argv[1]) if len(sys.argv) > 1 else 0
+frames_per_batch = 15
+
+out_dir = os.path.join(os.getcwd(), "output", "box_dataset", f"batch_{batch_id:03d}")
+os.makedirs(out_dir, exist_ok=True)
+print(f"Batch {batch_id}: saving {frames_per_batch} frames to: {out_dir}")
 
 assets_root_path = get_assets_root_path()
 if assets_root_path is None:
@@ -157,13 +162,12 @@ def randomize_light_position():
         rep.modify.pose(position=(x, y, light_height))
 
 
-num_frames = 10
-for i in range(num_frames):
+for i in range(frames_per_batch):
     randomize_box()
     randomize_floor()
     randomize_light_position()
     rep.orchestrator.step(rt_subframes=96)
-    print(f"frame {i + 1}/{num_frames}")
+    print(f"frame {i + 1}/{frames_per_batch}")
 
-print("Dataset generated successfully!")
+print(f"Batch {batch_id} generated successfully!")
 simulation_app.close()
