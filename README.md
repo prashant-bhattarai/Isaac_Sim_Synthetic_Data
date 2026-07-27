@@ -25,4 +25,4 @@ See `DEBUGGING.md` for a full write-up of issues encountered and solved
 during dataset generation (ghosting, semantic label collisions, graph
 performance degradation, etc.)
 
-## The experiment folder include some simple script that help me experiment stuff while making this project. 
+The experiment folder include some simple script that help me experiment stuff while making this project. 
