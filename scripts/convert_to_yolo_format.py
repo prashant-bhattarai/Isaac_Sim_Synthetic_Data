@@ -29,7 +29,7 @@ for batch_name in batch_dirs:
     rgb_files = sorted(f for f in os.listdir(batch_path) if f.startswith("rgb_") and f.endswith(".png"))
 
     for rgb_file in rgb_files:
-        frame_id = rgb_file[len("rgb_"):-len(".png")]  # e.g. "0000"
+        frame_id = rgb_file[len("rgb_"):-len(".png")]
 
         bbox_path = os.path.join(batch_path, f"bounding_box_2d_tight_{frame_id}.npy")
         labels_path = os.path.join(batch_path, f"bounding_box_2d_tight_labels_{frame_id}.json")

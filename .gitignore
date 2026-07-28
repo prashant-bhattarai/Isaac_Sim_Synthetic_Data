@@ -15,3 +15,12 @@ kit_*.log
 # OS cruft
 .DS_Store
 Thumbs.db
+
+runs/
+
+real_test_images/
+
+torch_venv/
+
+yolo11s.pt
+yolo26n.pt
